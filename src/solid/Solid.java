@@ -4,10 +4,12 @@ import transforms.Mat4;
 import transforms.Mat4Identity;
 import transforms.Point3D;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class Solid {
+    protected Color color = Color.RED;
     protected ArrayList<Point3D> vb = new ArrayList<>();
     protected ArrayList<Integer> ib = new ArrayList<>();
     private Mat4 model = new Mat4Identity();
