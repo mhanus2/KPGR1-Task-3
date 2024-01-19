@@ -6,6 +6,7 @@ import rasterize.LineRasterizerTrivial;
 import rasterize.Raster;
 import renderer.WiredRenderer;
 import solid.Cube;
+import solid.Pyramid;
 import solid.Solid;
 import transforms.*;
 import view.Panel;
@@ -18,7 +19,8 @@ public class Controller3D implements Controller {
 
     private LineRasterizer rasterizer;
     private WiredRenderer renderer;
-
+    private double azimuth = 90;
+    private double zenith = 0;
     private Camera camera;
     private Mat4 proj;
 
@@ -36,8 +38,8 @@ public class Controller3D implements Controller {
 
         camera = new Camera(
           new Vec3D(0, -1, 0.3),
-          Math.toRadians(90),
-          Math.toRadians(-15),
+          Math.toRadians(azimuth),
+          Math.toRadians(zenith),
           1,
           true
         );
@@ -139,9 +141,16 @@ public class Controller3D implements Controller {
         renderer.setView(camera.getViewMatrix());
 
         Solid cube = new Cube();
-        cube.setModel(new Mat4Transl(1, 0, 0));
-        
+        Solid pyramid = new Pyramid();
+
+        Mat4 cubeModelMat = new Mat4RotY(-0.5).mul(new Mat4Scale(0.5)).mul(new Mat4Transl(0.75, 1, 0));
+        Mat4 pyramidModelMat = new Mat4RotZ(0.5).mul(new Mat4Scale(1.5)).mul(new Mat4Transl(-1.5, 1, 0));
+
+        cube.setModel(cubeModelMat);
+        pyramid.setModel(pyramidModelMat);
+
         renderer.render(cube);
+        renderer.render(pyramid);
 
         panel.repaint();
     }
