@@ -34,7 +34,7 @@ public class Controller3D implements Controller {
 
     public void initObjects(Raster raster) {
         rasterizer = new LineRasterizerGraphics(raster);
-        renderer = new WiredRenderer(rasterizer);
+        renderer = new WiredRenderer(rasterizer, raster.getWidth(), raster.getHeight());
 
         camera = new Camera(
           new Vec3D(0, -1, 0.3),

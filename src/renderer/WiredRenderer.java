@@ -4,16 +4,18 @@ import rasterize.LineRasterizer;
 import solid.Solid;
 import transforms.Mat4;
 import transforms.Point3D;
-
-import java.awt.*;
+import transforms.Vec3D;
 
 public class WiredRenderer {
     private LineRasterizer lineRasterizer;
-
     private Mat4 view, proj;
+    private final Vec3D windowTransformA = new Vec3D(1, -1, 1);
+    private final Vec3D windowTransformB = new Vec3D(1, 1, 0);
+    private final Vec3D windowTransformC;
 
-    public WiredRenderer(LineRasterizer lineRasterizer) {
+    public WiredRenderer(LineRasterizer lineRasterizer, int width, int height) {
         this.lineRasterizer = lineRasterizer;
+        this.windowTransformC = new Vec3D((double) (width - 1) / 2, (double) (height - 1) / 2, 1);
     }
 
     public void render(Solid solid) {
@@ -38,15 +40,29 @@ public class WiredRenderer {
 
             // TODO: ořezání
 
-            // TODO: dehomogenizace
+            // Dehomogenizace
+            Vec3D v = new Vec3D();
+            Vec3D w = new Vec3D();
 
-            // TODO: tranformace do okna obrazovky
+            if (a.dehomog().isPresent())
+                v = a.dehomog().get();
+            if (b.dehomog().isPresent())
+                w = b.dehomog().get();
+
+            // Tranformace do okna obrazovky
+            Vec3D aTransformed = v.mul(windowTransformA);
+            aTransformed = aTransformed.add(windowTransformB);
+            aTransformed = aTransformed.mul(windowTransformC);
+
+            Vec3D bTransformed = w.mul(windowTransformA);
+            bTransformed = bTransformed.add(windowTransformB);
+            bTransformed = bTransformed.mul(windowTransformC);
 
             // Rasterizace
             lineRasterizer.rasterize(
-                    (int)Math.round(a.getX()), (int)Math.round(a.getY()),
-                    (int)Math.round(b.getX()), (int)Math.round(b.getY()),
-                    Color.RED
+                    (int)Math.round(aTransformed.getX()), (int)Math.round(aTransformed.getY()),
+                    (int)Math.round(bTransformed.getX()), (int)Math.round(bTransformed.getY()),
+                    solid.getColor()
             );
         }
     }

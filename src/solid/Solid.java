@@ -33,4 +33,7 @@ public abstract class Solid {
     public void setModel(Mat4 model) {
         this.model = model;
     }
+    public Color getColor() {
+        return color;
+    }
 }
