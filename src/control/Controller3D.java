@@ -94,10 +94,22 @@ public class Controller3D implements Controller {
         panel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                // na klávesu C vymazat plátno
-                if (e.getKeyCode() == KeyEvent.VK_C) {
-                    //TODO
+                if (e.getKeyCode() == KeyEvent.VK_O) {
+                    double zn = 0.1;
+                    double zf = 20;
+                    int w = panel.getWidth() / 150;
+                    int h = panel.getHeight() / 150;
+
+                    proj = new Mat4OrthoRH(w, h, zn, zf);
+                } else if (e.getKeyCode() == KeyEvent.VK_P) {
+                    proj = new Mat4PerspRH(
+                            Math.PI / 4,
+                            panel.getRaster().getHeight() / (double) panel.getRaster().getWidth(),
+                            0.1,
+                            20
+                    );
                 }
+                update();
             }
         });
 
