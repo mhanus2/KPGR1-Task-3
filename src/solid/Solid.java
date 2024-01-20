@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 public abstract class Solid {
     protected Color color = Color.RED;
+    protected Color[] colors;
     protected ArrayList<Point3D> vb = new ArrayList<>();
     protected ArrayList<Integer> ib = new ArrayList<>();
     private Mat4 model = new Mat4Identity();
@@ -35,5 +36,11 @@ public abstract class Solid {
     }
     public Color getColor() {
         return color;
+    }
+    public Color getColor(int i) {
+        return colors[i];
+    }
+    public boolean isMultipleColor() {
+        return colors != null;
     }
 }

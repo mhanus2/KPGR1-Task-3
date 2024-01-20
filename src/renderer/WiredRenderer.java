@@ -1,10 +1,13 @@
 package renderer;
 
 import rasterize.LineRasterizer;
+
 import solid.Solid;
 import transforms.Mat4;
 import transforms.Point3D;
 import transforms.Vec3D;
+
+import java.awt.*;
 
 public class WiredRenderer {
     private final LineRasterizer lineRasterizer;
@@ -17,6 +20,8 @@ public class WiredRenderer {
         this.lineRasterizer = lineRasterizer;
         this.windowTransformC = new Vec3D((double) (width - 1) / 2, (double) (height - 1) / 2, 1);
     }
+
+
 
     public void render(Solid solid) {
         for (int i = 0; i < solid.getIb().size(); i += 2) {
@@ -59,12 +64,11 @@ public class WiredRenderer {
                     bTransformed = bTransformed.add(windowTransformB);
                     bTransformed = bTransformed.mul(windowTransformC);
 
-                    // Rasterizace
-                    lineRasterizer.rasterize(
-                            (int) Math.round(aTransformed.getX()), (int) Math.round(aTransformed.getY()),
-                            (int) Math.round(bTransformed.getX()), (int) Math.round(bTransformed.getY()),
-                            solid.getColor()
-                    );
+                    if (solid.isMultipleColor()) {
+                        rasterize(aTransformed,bTransformed,solid.getColor(i/2));
+                    } else {
+                        rasterize(aTransformed,bTransformed,solid.getColor());
+                    }
                 }
             }
         }
@@ -82,6 +86,14 @@ public class WiredRenderer {
         return (-point.getW() <= point.getX() && point.getX() <= point.getW()) &&
                 (-point.getW() <= point.getY() && point.getY() <= point.getW()) &&
                 (0 <= point.getZ() && point.getZ() <= point.getW());
+    }
+
+    private void rasterize(Vec3D a, Vec3D b, Color color) {
+        lineRasterizer.rasterize(
+                (int) Math.round(a.getX()), (int) Math.round(a.getY()),
+                (int) Math.round(b.getX()), (int) Math.round(b.getY()),
+                color
+        );
     }
 }
 

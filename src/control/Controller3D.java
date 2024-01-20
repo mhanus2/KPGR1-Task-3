@@ -4,10 +4,7 @@ import rasterize.LineRasterizer;
 import rasterize.LineRasterizerGraphics;
 import rasterize.Raster;
 import renderer.WiredRenderer;
-import solid.Cube;
-import solid.Curve;
-import solid.Pyramid;
-import solid.Solid;
+import solid.*;
 import transforms.*;
 import view.Panel;
 
@@ -157,6 +154,7 @@ public class Controller3D implements Controller {
 
         Solid cube = new Cube();
         Solid pyramid = new Pyramid();
+        Solid axes = new Axes();
 
         Solid curveFerguson = new Curve(FERGUSON,
                 new Point3D(0, 0, 0),
@@ -188,6 +186,7 @@ public class Controller3D implements Controller {
 
         renderer.render(cube);
         renderer.render(pyramid);
+        renderer.render(axes);
         renderer.render(curveFerguson);
         renderer.render(curveBezier);
         renderer.render(curveCoons);
