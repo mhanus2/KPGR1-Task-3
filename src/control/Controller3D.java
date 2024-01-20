@@ -19,6 +19,8 @@ public class Controller3D implements Controller {
 
     private LineRasterizer rasterizer;
     private WiredRenderer renderer;
+    int firstX;
+    int firstY;
     private double azimuth = 90;
     private double zenith = 0;
     private Camera camera;
@@ -55,33 +57,13 @@ public class Controller3D implements Controller {
     @Override
     public void initListeners(Panel panel) {
         panel.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.isControlDown()) return;
-
-                if (e.isShiftDown()) {
-                    //TODO
-                } else if (SwingUtilities.isLeftMouseButton(e)) {
-                    // rasterizer.rasterize(x, y, e.getX(),e.getY(), Color.RED);
-                } else if (SwingUtilities.isMiddleMouseButton(e)) {
-                    //TODO
-                } else if (SwingUtilities.isRightMouseButton(e)) {
-                    //TODO
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    firstX = e.getX();
+                    firstY = e.getY();
                 }
-
                 update();
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.isControlDown()) {
-                    if (SwingUtilities.isLeftMouseButton(e)) {
-                        //TODO
-                    } else if (SwingUtilities.isRightMouseButton(e)) {
-                        //TODO
-                    }
-                }
             }
         });
 
@@ -90,27 +72,21 @@ public class Controller3D implements Controller {
             public void mouseDragged(MouseEvent e) {
                 panel.clear();
 
-                rasterizer.rasterize(
-                        panel.getRaster().getWidth() / 2,
-                        panel.getRaster().getHeight() / 2,
-                        e.getX(),
-                        e.getY(),
-                        Color.YELLOW
-                );
+                int dy = e.getY() - firstY;
+                zenith -= (double) (180 * dy) / panel.getHeight();
 
-                panel.repaint();
+                if (zenith > 90) zenith = 90;
+                if (zenith < -90) zenith = -90;
+
+                int dx = e.getX() - firstX;
+
+                azimuth -= (double) (180 * dx) / panel.getWidth();
+                azimuth = azimuth % 360;
+
+                firstX = e.getX();
+                firstY = e.getY();
 
                 if (e.isControlDown()) return;
-
-                if (e.isShiftDown()) {
-                    //TODO
-                } else if (SwingUtilities.isLeftMouseButton(e)) {
-                    //TODO
-                } else if (SwingUtilities.isRightMouseButton(e)) {
-                    //TODO
-                } else if (SwingUtilities.isMiddleMouseButton(e)) {
-                    //TODO
-                }
                 update();
             }
         });
@@ -136,6 +112,8 @@ public class Controller3D implements Controller {
 
     private void update() {
         panel.clear();
+
+        camera = camera.withAzimuth(Math.toRadians(azimuth)).withZenith(Math.toRadians(zenith));
 
         renderer.setProj(proj);
         renderer.setView(camera.getViewMatrix());
