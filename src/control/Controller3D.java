@@ -2,7 +2,6 @@ package control;
 
 import rasterize.LineRasterizer;
 import rasterize.LineRasterizerGraphics;
-import rasterize.LineRasterizerTrivial;
 import rasterize.Raster;
 import renderer.WiredRenderer;
 import solid.Cube;
@@ -12,7 +11,6 @@ import transforms.*;
 import view.Panel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 public class Controller3D implements Controller {
     private final Panel panel;
@@ -25,6 +23,7 @@ public class Controller3D implements Controller {
     private double zenith = 0;
     private Camera camera;
     private Mat4 proj;
+    private final double step = 0.1;
 
     public Controller3D(Panel panel) {
         this.panel = panel;
@@ -108,6 +107,18 @@ public class Controller3D implements Controller {
                             0.1,
                             20
                     );
+                } else if (e.getKeyCode() == KeyEvent.VK_W) {
+                    camera = camera.forward(step);
+                } else if (e.getKeyCode() == KeyEvent.VK_A) {
+                    camera = camera.left(step);
+                } else if (e.getKeyCode() == KeyEvent.VK_D) {
+                    camera = camera.right(step);
+                } else if (e.getKeyCode() == KeyEvent.VK_S) {
+                    camera = camera.backward(step);
+                } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    camera = camera.up(step);
+                } else if (e.getKeyCode() == KeyEvent.VK_C) {
+                    camera = camera.down(step);
                 }
                 update();
             }
@@ -144,9 +155,4 @@ public class Controller3D implements Controller {
 
         panel.repaint();
     }
-
-    private void hardClear() {
-        panel.clear();
-    }
-
 }
