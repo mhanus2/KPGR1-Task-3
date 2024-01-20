@@ -12,14 +12,14 @@ import view.Panel;
 
 import javax.swing.*;
 import java.awt.event.*;
+
 public class Controller3D implements Controller {
     private final Panel panel;
-
     private LineRasterizer rasterizer;
     private WiredRenderer renderer;
     int firstX;
     int firstY;
-    private double azimuth = 90;
+    private double azimuth = 92.5;
     private double zenith = 0;
     private Camera camera;
     private Mat4 proj;
@@ -27,6 +27,7 @@ public class Controller3D implements Controller {
 
     public Controller3D(Panel panel) {
         this.panel = panel;
+
         initObjects(panel.getRaster());
         initListeners(panel);
 
@@ -38,20 +39,20 @@ public class Controller3D implements Controller {
         renderer = new WiredRenderer(rasterizer, raster.getWidth(), raster.getHeight());
 
         camera = new Camera(
-          new Vec3D(0, -1, 0.3),
-          Math.toRadians(azimuth),
-          Math.toRadians(zenith),
-          1,
-          true
+                new Vec3D(0, -2, 0.3),
+                Math.toRadians(azimuth),
+                Math.toRadians(zenith),
+                1,
+                true
         );
 
         proj = new Mat4PerspRH(
                 Math.PI / 4,
-                raster.getHeight() / (double)raster.getWidth(),
+                raster.getHeight() / (double) raster.getWidth(),
                 0.1,
                 20
         );
-     }
+    }
 
     @Override
     public void initListeners(Panel panel) {
@@ -93,32 +94,41 @@ public class Controller3D implements Controller {
         panel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_O) {
-                    double zn = 0.1;
-                    double zf = 20;
-                    int w = panel.getWidth() / 150;
-                    int h = panel.getHeight() / 150;
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_O:
+                        double zn = 0.1;
+                        double zf = 20;
+                        int w = panel.getWidth() / 150;
+                        int h = panel.getHeight() / 150;
 
-                    proj = new Mat4OrthoRH(w, h, zn, zf);
-                } else if (e.getKeyCode() == KeyEvent.VK_P) {
-                    proj = new Mat4PerspRH(
-                            Math.PI / 4,
-                            panel.getRaster().getHeight() / (double) panel.getRaster().getWidth(),
-                            0.1,
-                            20
-                    );
-                } else if (e.getKeyCode() == KeyEvent.VK_W) {
-                    camera = camera.forward(step);
-                } else if (e.getKeyCode() == KeyEvent.VK_A) {
-                    camera = camera.left(step);
-                } else if (e.getKeyCode() == KeyEvent.VK_D) {
-                    camera = camera.right(step);
-                } else if (e.getKeyCode() == KeyEvent.VK_S) {
-                    camera = camera.backward(step);
-                } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    camera = camera.up(step);
-                } else if (e.getKeyCode() == KeyEvent.VK_C) {
-                    camera = camera.down(step);
+                        proj = new Mat4OrthoRH(w, h, zn, zf);
+                        break;
+                    case KeyEvent.VK_P:
+                        proj = new Mat4PerspRH(
+                                Math.PI / 4,
+                                panel.getRaster().getHeight() / (double) panel.getRaster().getWidth(),
+                                0.1,
+                                20
+                        );
+                        break;
+                    case KeyEvent.VK_W:
+                        camera = camera.forward(step);
+                        break;
+                    case KeyEvent.VK_A:
+                        camera = camera.left(step);
+                        break;
+                    case KeyEvent.VK_D:
+                        camera = camera.right(step);
+                        break;
+                    case KeyEvent.VK_S:
+                        camera = camera.backward(step);
+                        break;
+                    case KeyEvent.VK_SPACE:
+                        camera = camera.up(step);
+                        break;
+                    case KeyEvent.VK_CONTROL:
+                        camera = camera.down(step);
+                        break;
                 }
                 update();
             }
