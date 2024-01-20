@@ -70,23 +70,24 @@ public class Controller3D implements Controller {
         panel.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                panel.clear();
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    panel.clear();
 
-                int dy = e.getY() - firstY;
-                zenith -= (double) (180 * dy) / panel.getHeight();
+                    int dy = e.getY() - firstY;
+                    zenith -= (double) (180 * dy) / panel.getHeight();
 
-                if (zenith > 90) zenith = 90;
-                if (zenith < -90) zenith = -90;
+                    if (zenith > 90) zenith = 90;
+                    if (zenith < -90) zenith = -90;
 
-                int dx = e.getX() - firstX;
+                    int dx = e.getX() - firstX;
 
-                azimuth -= (double) (180 * dx) / panel.getWidth();
-                azimuth = azimuth % 360;
+                    azimuth -= (double) (180 * dx) / panel.getWidth();
+                    azimuth = azimuth % 360;
 
-                firstX = e.getX();
-                firstY = e.getY();
+                    firstX = e.getX();
+                    firstY = e.getY();
+                }
 
-                if (e.isControlDown()) return;
                 update();
             }
         });
