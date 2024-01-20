@@ -5,13 +5,17 @@ import rasterize.LineRasterizerGraphics;
 import rasterize.Raster;
 import renderer.WiredRenderer;
 import solid.Cube;
+import solid.Curve;
 import solid.Pyramid;
 import solid.Solid;
 import transforms.*;
 import view.Panel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
+
+import static transforms.Cubic.*;
 
 public class Controller3D implements Controller {
     private final Panel panel;
@@ -154,14 +158,39 @@ public class Controller3D implements Controller {
         Solid cube = new Cube();
         Solid pyramid = new Pyramid();
 
+        Solid curveFerguson = new Curve(FERGUSON,
+                new Point3D(0, 0, 0),
+                new Point3D(1, 1, 1),
+                new Point3D(1, 1, 0),
+                new Point3D(0, 0, 1),
+                Color.CYAN);
+        Solid curveBezier = new Curve(BEZIER,
+                new Point3D(1, 0, 0),
+                new Point3D(0.25, 0.75, 0.25),
+                new Point3D(0.75, 0.25, 0.75),
+                new Point3D(0, 1, 1),
+                Color.MAGENTA);
+        Solid curveCoons = new Curve(COONS,
+                new Point3D(0, 1, 0),
+                new Point3D(0, 0, 0),
+                new Point3D(0, 0, 0),
+                new Point3D(1, 0, 1),
+                Color.YELLOW);
+
         Mat4 cubeModelMat = new Mat4RotY(-0.5).mul(new Mat4Scale(0.5)).mul(new Mat4Transl(0.75, 1, 0));
         Mat4 pyramidModelMat = new Mat4RotZ(0.5).mul(new Mat4Scale(1.5)).mul(new Mat4Transl(-1.5, 1, 0));
 
         cube.setModel(cubeModelMat);
         pyramid.setModel(pyramidModelMat);
+        curveFerguson.setModel(cubeModelMat);
+        curveBezier.setModel(cubeModelMat);
+        curveCoons.setModel(cubeModelMat);
 
         renderer.render(cube);
         renderer.render(pyramid);
+        renderer.render(curveFerguson);
+        renderer.render(curveBezier);
+        renderer.render(curveCoons);
 
         panel.repaint();
     }
