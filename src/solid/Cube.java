@@ -3,7 +3,6 @@ package solid;
 import transforms.Point3D;
 
 public class Cube extends Solid {
-
     public Cube() {
         // vb
         vb.add(new Point3D(0, 0, 0)); // v0

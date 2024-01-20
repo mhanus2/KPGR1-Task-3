@@ -1,7 +1,6 @@
 package renderer;
 
 import rasterize.LineRasterizer;
-
 import solid.Solid;
 import transforms.Mat4;
 import transforms.Point3D;
@@ -20,7 +19,6 @@ public class WiredRenderer {
         this.lineRasterizer = lineRasterizer;
         this.windowTransformC = new Vec3D((double) (width - 1) / 2, (double) (height - 1) / 2, 1);
     }
-
 
 
     public void render(Solid solid) {
@@ -65,9 +63,9 @@ public class WiredRenderer {
                     bTransformed = bTransformed.mul(windowTransformC);
 
                     if (solid.isMultipleColor()) {
-                        rasterize(aTransformed,bTransformed,solid.getColor(i/2));
+                        rasterize(aTransformed, bTransformed, solid.getColor(i / 2));
                     } else {
-                        rasterize(aTransformed,bTransformed,solid.getColor());
+                        rasterize(aTransformed, bTransformed, solid.getColor());
                     }
                 }
             }

@@ -34,12 +34,15 @@ public abstract class Solid {
     public void setModel(Mat4 model) {
         this.model = model;
     }
+
     public Color getColor() {
         return color;
     }
+
     public Color getColor(int i) {
         return colors[i];
     }
+
     public boolean isMultipleColor() {
         return colors != null;
     }

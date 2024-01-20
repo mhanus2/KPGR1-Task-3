@@ -16,7 +16,6 @@ import static transforms.Cubic.*;
 
 public class Controller3D implements Controller {
     private final Panel panel;
-    private LineRasterizer rasterizer;
     private WiredRenderer renderer;
     int firstX;
     int firstY;
@@ -36,7 +35,7 @@ public class Controller3D implements Controller {
     }
 
     public void initObjects(Raster raster) {
-        rasterizer = new LineRasterizerGraphics(raster);
+        LineRasterizer rasterizer = new LineRasterizerGraphics(raster);
         renderer = new WiredRenderer(rasterizer, raster.getWidth(), raster.getHeight());
 
         camera = new Camera(
